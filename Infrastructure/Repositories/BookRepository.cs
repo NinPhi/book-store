@@ -29,9 +29,12 @@ internal class BookRepository : IBookRepository
         return entity;
     }
 
-    public Task<Book?> GetByTitleAsync(string title)
+    public Task<Book?> GetByTitleAndAuthorAsync(string title, string author)
     {
-        return _context.Books.AsNoTracking().FirstOrDefaultAsync(u => u.Title == title);
+        return _context.Books.AsNoTracking()
+            .FirstOrDefaultAsync(b =>
+                b.Title == title &&
+                b.Author == author);
     }
 
     public void Add(Book entity)

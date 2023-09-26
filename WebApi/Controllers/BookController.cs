@@ -2,8 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using System.Text.Unicode;
 
 namespace WebApi.Controllers;
 
@@ -30,11 +28,13 @@ public class BookController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("{title}")]
-    public async Task<IActionResult> GetByTitle(string title)
+    public async Task<IActionResult> GetByTitle(
+        string title, string author)
     {
-        var request = new GetBookByTitleQuery
+        var request = new GetBookByTitleAndAuthorQuery
         {
             Title = title,
+            Author = author,
         };
 
         var response = await _mediator.Send(request);

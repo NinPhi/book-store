@@ -22,7 +22,12 @@ internal class AppDbContext : DbContext
         var userProfile = modelBuilder.Entity<UserProfile>();
         userProfile.ToTable("UserProfiles");
         userProfile.HasKey(up => up.UserId);
+
+        var book = modelBuilder.Entity<Book>();
+        book.HasIndex(b => b.ISBN).IsUnique();
+        book.HasIndex(b => new { b.Title, b.Author }).IsUnique();
     }
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<Book> Books => Set<Book>();
 }

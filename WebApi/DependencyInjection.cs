@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.OpenApi.Models;
 using WebApi.Helpers;
 
 namespace WebApi;
@@ -29,9 +28,7 @@ public static class DependencyInjection
                 ValidateAudience = false,
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = true,
-                IssuerSigningKey =
-                    new SymmetricSecurityKey(
-                        Encoding.ASCII.GetBytes(jwtKey)),
+                IssuerSigningKey = securityKey,
             };
         });
 
@@ -40,6 +37,42 @@ public static class DependencyInjection
             opts.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();
+        });
+
+        return services;
+    }
+
+    public static IServiceCollection AddSwagger(
+        this IServiceCollection services)
+    {
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "BookStoreApi",
+                Version = "v1"
+            });
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please insert JWT with Bearer into field",
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
         });
 
         return services;

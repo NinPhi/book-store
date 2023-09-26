@@ -1,9 +1,11 @@
 ﻿using Application.Features.Users;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
 
+[Authorize(Roles = "Admin")]
 [ApiController, Route("api/users")]
 public class UserController : ControllerBase
 {

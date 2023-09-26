@@ -29,7 +29,7 @@ internal class BookRepository : IBookRepository
         return entity;
     }
 
-    public Task<Book?> GetByTitle(string title)
+    public Task<Book?> GetByTitleAsync(string title)
     {
         return _context.Books.AsNoTracking().FirstOrDefaultAsync(u => u.Title == title);
     }

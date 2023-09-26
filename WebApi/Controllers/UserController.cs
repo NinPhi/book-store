@@ -27,7 +27,7 @@ public class UserController : ControllerBase
     [HttpGet("{username}")]
     public async Task<IActionResult> GetByUsername(string username)
     {
-        var request = new GetByUsernameQuery
+        var request = new GetUserByUsernameQuery
         {
             Username = username
         };

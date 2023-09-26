@@ -4,23 +4,23 @@ using Mapster;
 
 namespace Application.Features.Users;
 
-public record GetByUsernameQuery : IRequest<UserDto?>
+public record GetUserByUsernameQuery : IRequest<UserDto?>
 {
     public required string Username { get; init; }
 }
 
-internal class GetByUsernameQueryHandler
-    : IRequestHandler<GetByUsernameQuery, UserDto?>
+internal class GetUserByUsernameQueryHandler
+    : IRequestHandler<GetUserByUsernameQuery, UserDto?>
 {
     private readonly IUserRepository _userRepository;
 
-    public GetByUsernameQueryHandler(IUserRepository userRepository)
+    public GetUserByUsernameQueryHandler(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
 
     public async Task<UserDto?> Handle(
-        GetByUsernameQuery request, CancellationToken cancellationToken)
+        GetUserByUsernameQuery request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByUsernameAsync(request.Username);
 

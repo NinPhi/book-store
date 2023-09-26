@@ -1,5 +1,6 @@
 ﻿using Application.Shared;
 using Domain.Repositories;
+using Domain.Shared;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
@@ -17,6 +18,7 @@ public static class DependencyInjection
     {
         return services
             .AddAppDbContext(configuration)
+            .AddTransient<IUnitOfWork, UnitOfWork>()
             .AddRepositories()
             .AddOtherServices();
     }
@@ -28,8 +30,6 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(opts =>
             opts.UseSqlServer(configuration.GetConnectionString("Default")));
 
-        services.AddRepositories();
-
         return services;
     }
 
@@ -40,7 +40,7 @@ public static class DependencyInjection
 
         return services;
     }
-
+    
     private static IServiceCollection AddOtherServices(
         this IServiceCollection services)
     {

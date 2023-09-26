@@ -14,13 +14,27 @@ public class UserController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Add(
-        AddUserCommand request)
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
     {
+        var request = new GetAllUsersQuery();
+
         var response = await _mediator.Send(request);
 
-        return Created("users/" + response.Id, response);
+        return Ok(response);
+    }
+
+    [HttpGet("{username}")]
+    public async Task<IActionResult> GetByUsername(string username)
+    {
+        var request = new GetByUsernameQuery
+        {
+            Username = username
+        };
+
+        var response = await _mediator.Send(request);
+
+        return Ok(response ?? new object());
     }
 
     [HttpDelete]
@@ -29,11 +43,20 @@ public class UserController : ControllerBase
     {
         var request = new DeleteUserCommand
         {
-            Username = username,    
+            Username = username,
         };
 
         await _mediator.Send(request);
 
         return Ok();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Add(
+        AddUserCommand request)
+    {
+        var response = await _mediator.Send(request);
+
+        return Created("users/" + response.Username, response);
     }
 }

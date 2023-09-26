@@ -1,4 +1,5 @@
-﻿using Application.Shared;
+﻿using Application.Contracts;
+using Application.Shared;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Repositories;
@@ -7,22 +8,15 @@ using Mapster;
 
 namespace Application.Features.Users;
 
-public record AddUserCommand : IRequest<AddUserResponse>
+public record AddUserCommand : IRequest<UserDto>
 {
     public required string Username { get; init; }
     public required string Password { get; init; }
     public required UserRole Role { get; init; }
 }
 
-public record AddUserResponse
-{
-    public required long Id { get; init; }
-    public required string Username { get; init; }
-    public required UserRole Role { get; init; }
-}
-
 internal class AddUserCommandHandler
-    : IRequestHandler<AddUserCommand, AddUserResponse>
+    : IRequestHandler<AddUserCommand, UserDto>
 {
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _uow;
@@ -35,7 +29,7 @@ internal class AddUserCommandHandler
         _passwordManager = passwordManager;
     }
 
-    public async Task<AddUserResponse> Handle(
+    public async Task<UserDto> Handle(
         AddUserCommand request, CancellationToken cancellationToken)
     {
         var userExists = await _userRepository.ExistsAsync(request.Username);
@@ -55,7 +49,7 @@ internal class AddUserCommandHandler
         _userRepository.Add(user);
         await _uow.CommitAsync();
 
-        var response = user.Adapt<AddUserResponse>();
+        var response = user.Adapt<UserDto>();
         return response;
     }
 }

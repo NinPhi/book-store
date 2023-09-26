@@ -16,17 +16,22 @@ internal class UserRepository : IUserRepository
 
     public Task<List<User>> GetAllAsync()
     {
-        return _context.Users.ToListAsync();
+        return _context.Users.AsNoTracking().ToListAsync();
     }
 
-    public Task<User?> GetByIdAsync(long id)
+    public async Task<User?> GetByIdAsync(long id)
     {
-        return _context.Users.FindAsync(id).AsTask();
+        var entity = await _context.Users.FindAsync(id);
+
+        if (entity != null)
+            _context.Entry(entity).State = EntityState.Detached;
+
+        return entity;
     }
 
     public Task<User?> GetByUsernameAsync(string username)
     {
-        return _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        return _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Username == username);
     }
 
     public Task<bool> ExistsAsync(string username)

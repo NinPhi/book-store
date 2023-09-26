@@ -46,9 +46,18 @@ public class UserController : ControllerBase
         return Created("users/" + response.Username, response);
     }
 
-    [HttpPatch]
-    public async Task<IActionResult> Patch(
+    [HttpPatch("profile")]
+    public async Task<IActionResult> PatchProfile(
         PatchUserProfileCommand request)
+    {
+        await _mediator.Send(request);
+
+        return Ok();
+    }
+
+    [HttpPatch("role")]
+    public async Task<IActionResult> SetRole(
+        SetUserRoleCommand request)
     {
         await _mediator.Send(request);
 

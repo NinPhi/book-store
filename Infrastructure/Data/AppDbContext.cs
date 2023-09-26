@@ -13,9 +13,11 @@ internal class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var user = modelBuilder.Entity<User>();
-        user.Navigation(u => u.Profile).AutoInclude();
+        user.HasIndex(c => c.Username).IsUnique();
         user.Property(c => c.Username)
+            // Makes username case-insensitive
             .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        user.Navigation(u => u.Profile).AutoInclude();
 
         var userProfile = modelBuilder.Entity<UserProfile>();
         userProfile.ToTable("UserProfiles");

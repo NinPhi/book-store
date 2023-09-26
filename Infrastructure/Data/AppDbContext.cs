@@ -26,6 +26,12 @@ internal class AppDbContext : DbContext
         var book = modelBuilder.Entity<Book>();
         book.HasIndex(b => b.ISBN).IsUnique();
         book.HasIndex(b => new { b.Title, b.Author }).IsUnique();
+        book.Property(c => c.Title)
+            // Makes title case-insensitive
+            .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        book.Property(c => c.Author)
+            // Makes author case-insensitive
+            .UseCollation("SQL_Latin1_General_CP1_CI_AS");
     }
 
     public DbSet<User> Users => Set<User>();

@@ -22,4 +22,18 @@ public class UserController : ControllerBase
 
         return Created("users/" + response.Id, response);
     }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete(
+        string username)
+    {
+        var request = new DeleteUserCommand
+        {
+            Username = username,    
+        };
+
+        await _mediator.Send(request);
+
+        return Ok();
+    }
 }

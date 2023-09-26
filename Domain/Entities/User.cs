@@ -14,4 +14,6 @@ public class User
     public required string PasswordHash { get; set; }
 
     public required UserRole Role { get; set; }
+
+    public required UserProfile Profile { get; set; }
 }

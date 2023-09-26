@@ -12,10 +12,10 @@ public class UserProfile
     [StringLength(200)]
     public required string LastName { get; set; }
 
-    [StringLength(300)]
-    public required string Email { get; set; }
-
     public required DateTime Dob { get; set; }
+
+    [StringLength(600)]
+    public required string Address { get; set; }
 
     public User? User { get; set; }
 }

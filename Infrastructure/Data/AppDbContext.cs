@@ -10,10 +10,14 @@ internal class AppDbContext : DbContext
         
     }
 
-    protected override void OnConfiguring(
-        DbContextOptionsBuilder optionsBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnConfiguring(optionsBuilder);
+        var user = modelBuilder.Entity<User>();
+        user.Navigation(u => u.Profile).AutoInclude();
+
+        var userProfile = modelBuilder.Entity<UserProfile>();
+        userProfile.ToTable("UserProfiles");
+        userProfile.HasKey(up => up.UserId);
     }
 
     public DbSet<User> Users => Set<User>();

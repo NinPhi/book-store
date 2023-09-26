@@ -14,6 +14,8 @@ internal class AppDbContext : DbContext
     {
         var user = modelBuilder.Entity<User>();
         user.Navigation(u => u.Profile).AutoInclude();
+        user.Property(c => c.Username)
+            .UseCollation("SQL_Latin1_General_CP1_CI_AS");
 
         var userProfile = modelBuilder.Entity<UserProfile>();
         userProfile.ToTable("UserProfiles");

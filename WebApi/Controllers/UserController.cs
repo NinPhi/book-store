@@ -37,6 +37,24 @@ public class UserController : ControllerBase
         return Ok(response ?? new object());
     }
 
+    [HttpPost]
+    public async Task<IActionResult> Add(
+        AddUserCommand request)
+    {
+        var response = await _mediator.Send(request);
+
+        return Created("users/" + response.Username, response);
+    }
+
+    [HttpPatch]
+    public async Task<IActionResult> Patch(
+        PatchUserProfileCommand request)
+    {
+        await _mediator.Send(request);
+
+        return Ok();
+    }
+
     [HttpDelete]
     public async Task<IActionResult> Delete(
         string username)
@@ -49,14 +67,5 @@ public class UserController : ControllerBase
         await _mediator.Send(request);
 
         return Ok();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Add(
-        AddUserCommand request)
-    {
-        var response = await _mediator.Send(request);
-
-        return Created("users/" + response.Username, response);
     }
 }

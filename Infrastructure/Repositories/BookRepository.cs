@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -15,31 +16,36 @@ internal class BookRepository : IBookRepository
 
     public Task<List<Book>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return _context.Books.AsNoTracking().ToListAsync();
     }
 
-    public Task<Book?> GetByIdAsync(long id)
+    public async Task<Book?> GetByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        var entity = await _context.Books.FindAsync(id);
+
+        if (entity != null)
+            _context.Entry(entity).State = EntityState.Detached;
+
+        return entity;
     }
 
     public Task<Book?> GetByTitle(string title)
     {
-        throw new NotImplementedException();
+        return _context.Books.AsNoTracking().FirstOrDefaultAsync(u => u.Title == title);
     }
 
     public void Add(Book entity)
     {
-        throw new NotImplementedException();
+        _context.Books.Add(entity);
     }
 
     public void Update(Book entity)
     {
-        throw new NotImplementedException();
+        _context.Books.Update(entity);
     }
 
     public void Delete(Book entity)
     {
-        throw new NotImplementedException();
+        _context.Books.Remove(entity);
     }
 }

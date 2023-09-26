@@ -37,6 +37,7 @@ public static class DependencyInjection
         this IServiceCollection services)
     {
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IBookRepository, BookRepository>();
 
         return services;
     }

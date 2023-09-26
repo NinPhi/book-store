@@ -3,17 +3,26 @@ using Domain.Entities;
 using Domain.Enums;
 using Domain.Repositories;
 using Domain.Shared;
+using Mapster;
 
 namespace Application.Features.Users;
 
-public record AddUserCommand : IRequest
+public record AddUserCommand : IRequest<AddUserResponse>
 {
     public required string Username { get; init; }
     public required string Password { get; init; }
     public required UserRole Role { get; init; }
 }
 
-internal class AddUserCommandHandler : IRequestHandler<AddUserCommand>
+public record AddUserResponse
+{
+    public required long Id { get; init; }
+    public required string Username { get; init; }
+    public required UserRole Role { get; init; }
+}
+
+internal class AddUserCommandHandler
+    : IRequestHandler<AddUserCommand, AddUserResponse>
 {
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _uow;
@@ -26,7 +35,7 @@ internal class AddUserCommandHandler : IRequestHandler<AddUserCommand>
         _passwordManager = passwordManager;
     }
 
-    public async Task Handle(
+    public async Task<AddUserResponse> Handle(
         AddUserCommand request, CancellationToken cancellationToken)
     {
         var userExists = await _userRepository.ExistsAsync(request.Username);
@@ -45,5 +54,8 @@ internal class AddUserCommandHandler : IRequestHandler<AddUserCommand>
 
         _userRepository.Add(user);
         await _uow.CommitAsync();
+
+        var response = user.Adapt<AddUserResponse>();
+        return response;
     }
 }

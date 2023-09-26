@@ -2,6 +2,6 @@
 
 public interface IReadRepository<TEntity>
 {
-    Task<TEntity?> GetById(long id);
-    Task<List<TEntity>> GetAll();
+    Task<TEntity?> GetByIdAsync(long id);
+    Task<List<TEntity>> GetAllAsync();
 }

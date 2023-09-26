@@ -2,7 +2,7 @@
 
 public interface IWriteRepository<TEntity>
 {
-    Task<TEntity> Create(TEntity entity);
+    void Add(TEntity entity);
     void Update(TEntity entity);
     void Delete(TEntity entity);
 }

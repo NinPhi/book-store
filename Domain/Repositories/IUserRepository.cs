@@ -1,6 +1,10 @@
-﻿namespace Domain.Repositories;
+﻿using Domain.Entities;
+using Domain.Shared;
 
-public interface IUserRepository
+namespace Domain.Repositories;
+
+public interface IUserRepository : IRepository<User>
 {
-
+    Task<User?> GetByUsernameAsync(string username);
+    Task<bool> ExistsAsync(string username);
 }

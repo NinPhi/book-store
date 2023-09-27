@@ -52,14 +52,29 @@ public class BookController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpPut("{isbn}")]
-    public async Task<IActionResult> Edit(
+    [HttpPatch("{isbn}")]
+    public async Task<IActionResult> Patch(
         PatchBookProps props, string isbn)
     {
         var request = new PatchBookCommand
         {
             Isbn = isbn,
             Props = props,
+        };
+
+        await _mediator.Send(request);
+
+        return Ok();
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{isbn}")]
+    public async Task<IActionResult> Delete(
+        string isbn)
+    {
+        var request = new DeleteBookCommand
+        {
+            Isbn = isbn,
         };
 
         await _mediator.Send(request);

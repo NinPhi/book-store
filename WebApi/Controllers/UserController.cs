@@ -1,4 +1,5 @@
 ﻿using Application.Features.Users;
+using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -64,10 +65,16 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    [HttpPatch("role")]
+    [HttpPatch("{username}/role/{role:int}")]
     public async Task<IActionResult> SetRole(
-        SetUserRoleCommand request)
+        string username, UserRole role)
     {
+        var request = new SetUserRoleCommand
+        {
+            Username = username,
+            Role = role,
+        };
+
         await _mediator.Send(request);
 
         return Ok();

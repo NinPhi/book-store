@@ -3,7 +3,6 @@
 public record PatchBookCommand : IRequest
 {
     public required string Isbn { get; init; }
-
     public required PatchBookProps Props { get; init; }
 }
 
@@ -30,7 +29,7 @@ internal class PatchBookCommandHandler
         PatchBookCommand request, CancellationToken cancellationToken)
     {
         var book = await _bookRepository.GetByIsbnAsync(request.Isbn)
-            ?? throw new Exception("Book with the specified Isbn was not found.");
+            ?? throw new Exception("Book with the specified ISBN was not found.");
 
         if (!string.IsNullOrWhiteSpace(request.Props.Title))
             book.Title = request.Props.Title;

@@ -27,13 +27,13 @@ public class BookController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpGet("{Isbn}")]
+    [HttpGet("{isbn}")]
     public async Task<IActionResult> GetByTitle(
-        string Isbn)
+        string isbn)
     {
         var request = new GetBookByIsbnQuery
         {
-            Isbn = Isbn,
+            Isbn = isbn,
         };
 
         var response = await _mediator.Send(request);
@@ -52,13 +52,13 @@ public class BookController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpPut("{Isbn}")]
+    [HttpPut("{isbn}")]
     public async Task<IActionResult> Edit(
-        PatchBookProps props, string Isbn)
+        PatchBookProps props, string isbn)
     {
         var request = new PatchBookCommand
         {
-            Isbn = Isbn,
+            Isbn = isbn,
             Props = props,
         };
 

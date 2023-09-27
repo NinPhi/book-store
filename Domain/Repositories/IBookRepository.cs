@@ -5,5 +5,5 @@ namespace Domain.Repositories;
 
 public interface IBookRepository : IRepository<Book>
 {
-    Task<Book?> GetByIsbnAsync(string Isbn);
+    Task<Book?> GetByIsbnAsync(string isbn);
 }

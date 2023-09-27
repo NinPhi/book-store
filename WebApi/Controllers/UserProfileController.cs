@@ -2,11 +2,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using System.Security.Claims;
 
 namespace WebApi.Controllers;
 
-[ApiController, Route("api/profiles")]
+[ApiController, Route("api/profile")]
 public class UserProfileController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -14,6 +15,21 @@ public class UserProfileController : ControllerBase
     public UserProfileController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetOwnProfile()
+    {
+        var username = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+
+        var request = new GetUserByUsernameQuery
+        {
+            Username = username ?? string.Empty,
+        };
+
+        var response = await _mediator.Send(request);
+
+        return Ok(response?.Profile ?? new object());
     }
 
     [Authorize(Roles = "Admin")]

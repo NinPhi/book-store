@@ -1,4 +1,4 @@
-﻿using Application.Shared;
+﻿using Application.Services;
 using Domain.Repositories;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
@@ -42,9 +42,14 @@ public static class DependencyInjection
     }
     
     private static IServiceCollection AddOtherServices(
-        this IServiceCollection services)
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddTransient<IPasswordManager, PasswordManager>();
+        services.AddHttpClient<ITodoApi, TodoApi>(client =>
+        {
+            client.BaseAddress = 
+        });
 
         return services;
     }

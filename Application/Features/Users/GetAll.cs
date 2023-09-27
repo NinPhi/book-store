@@ -1,8 +1,6 @@
 ﻿namespace Application.Features.Users;
 
-public record GetAllUsersQuery : IRequest<List<UserDto>>
-{
-}
+public record GetAllUsersQuery : IRequest<List<UserDto>> { }
 
 internal class GetAllUsersQueryHandler
     : IRequestHandler<GetAllUsersQuery, List<UserDto>>

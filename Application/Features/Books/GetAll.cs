@@ -1,8 +1,6 @@
 ﻿namespace Application.Features.Books;
 
-public record GetAllBooksQuery : IRequest<List<BookDto>>
-{
-}
+public record GetAllBooksQuery : IRequest<List<BookDto>> { }
 
 public class GetAllBooksQueryHandler
     : IRequestHandler<GetAllBooksQuery, List<BookDto>>

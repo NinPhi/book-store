@@ -49,4 +49,18 @@ internal class BookRepository : IBookRepository
     {
         _context.Books.Remove(entity);
     }
+
+    public Task<List<Book>> SearchAsync(
+        string? title, string? author)
+    {
+        var query = _context.Books.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(title))
+            query = query.Where(b => b.Title.Contains(title));
+
+        if (!string.IsNullOrWhiteSpace(author))
+            query = query.Where(b => b.Author.Contains(author));
+
+        return query.ToListAsync();
+    }
 }

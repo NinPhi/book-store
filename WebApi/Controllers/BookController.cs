@@ -41,6 +41,22 @@ public class BookController : ControllerBase
         return Ok(response);
     }
 
+    [AllowAnonymous]
+    [HttpGet("search")]
+    public async Task<IActionResult> Search(
+        string? title = null, string? author = null)
+    {
+        var request = new SearchBooksQuery
+        {
+            Title = title,
+            Author = author,
+        };
+
+        var response = await _mediator.Send(request);
+
+        return Ok(response);
+    }
+
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Add(

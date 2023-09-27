@@ -29,12 +29,10 @@ internal class BookRepository : IBookRepository
         return entity;
     }
 
-    public Task<Book?> GetByTitleAndAuthorAsync(string title, string author)
+    public Task<Book?> GetByIsbnAsync(string Isbn)
     {
         return _context.Books.AsNoTracking()
-            .FirstOrDefaultAsync(b =>
-                b.Title == title &&
-                b.Author == author);
+            .FirstOrDefaultAsync(b => b.Isbn == Isbn);
     }
 
     public void Add(Book entity)

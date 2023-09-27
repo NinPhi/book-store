@@ -27,7 +27,8 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{username}")]
-    public async Task<IActionResult> GetByUsername(string username)
+    public async Task<IActionResult> GetByUsername(
+        string username)
     {
         var request = new GetUserByUsernameQuery
         {
@@ -48,10 +49,16 @@ public class UserController : ControllerBase
         return Created("users/" + response.Username, response);
     }
 
-    [HttpPatch("profile")]
+    [HttpPatch("{username}/profile")]
     public async Task<IActionResult> PatchProfile(
-        PatchUserProfileCommand request)
+        PatchUserProfileProps props, string username)
     {
+        var request = new PatchUserProfileCommand
+        {
+            Username = username,
+            Props = props,
+        };
+
         await _mediator.Send(request);
 
         return Ok();
@@ -66,7 +73,7 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete]
+    [HttpDelete("{username}")]
     public async Task<IActionResult> Delete(
         string username)
     {

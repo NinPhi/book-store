@@ -1,6 +1,4 @@
 ﻿using Domain.Enums;
-using Domain.Repositories;
-using Domain.Shared;
 
 namespace Application.Features.Users;
 

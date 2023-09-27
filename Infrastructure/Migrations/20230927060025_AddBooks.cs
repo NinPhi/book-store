@@ -16,7 +16,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ISBN = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Isbn = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Title = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
                     Author = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false)
@@ -27,15 +27,9 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_ISBN",
+                name: "IX_Books_Isbn",
                 table: "Books",
-                column: "ISBN",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Books_Title_Author",
-                table: "Books",
-                columns: new[] { "Title", "Author" },
+                column: "Isbn",
                 unique: true);
         }
 

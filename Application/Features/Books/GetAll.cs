@@ -1,8 +1,4 @@
-﻿using Application.Contracts;
-using Domain.Repositories;
-using Mapster;
-
-namespace Application.Features.Books;
+﻿namespace Application.Features.Books;
 
 public record GetAllBooksQuery : IRequest<List<BookDto>>
 {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230926142008_MakeBookTitleAuthorCaseInsensitive")]
-    partial class MakeBookTitleAuthorCaseInsensitive
+    [Migration("20230927060025_AddBooks")]
+    partial class AddBooks
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,13 +36,12 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<string>("ISBN")
+                    b.Property<string>("Isbn")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -50,15 +49,11 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(400)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ISBN")
-                        .IsUnique();
-
-                    b.HasIndex("Title", "Author")
+                    b.HasIndex("Isbn")
                         .IsUnique();
 
                     b.ToTable("Books");

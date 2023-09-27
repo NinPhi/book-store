@@ -5,10 +5,8 @@ namespace Infrastructure.Data;
 
 internal class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> opts) : base(opts)
-    {
-        
-    }
+    public AppDbContext(DbContextOptions<AppDbContext> opts)
+        : base(opts) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -24,14 +22,7 @@ internal class AppDbContext : DbContext
         userProfile.HasKey(up => up.UserId);
 
         var book = modelBuilder.Entity<Book>();
-        book.HasIndex(b => b.ISBN).IsUnique();
-        book.HasIndex(b => new { b.Title, b.Author }).IsUnique();
-        book.Property(c => c.Title)
-            // Makes title case-insensitive
-            .UseCollation("SQL_Latin1_General_CP1_CI_AS");
-        book.Property(c => c.Author)
-            // Makes author case-insensitive
-            .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        book.HasIndex(b => b.Isbn).IsUnique();
     }
 
     public DbSet<User> Users => Set<User>();

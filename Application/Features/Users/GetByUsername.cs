@@ -1,8 +1,4 @@
-﻿using Application.Contracts;
-using Domain.Repositories;
-using Mapster;
-
-namespace Application.Features.Users;
+﻿namespace Application.Features.Users;
 
 public record GetUserByUsernameQuery : IRequest<UserDto?>
 {

@@ -1,6 +1,4 @@
-﻿using Application.Shared;
-
-namespace Application.Features.Users;
+﻿namespace Application.Features.Users;
 
 public record VerifyPasswordQuery : IRequest<bool>
 {

@@ -1,14 +1,8 @@
-﻿using Application.Contracts;
-using Domain.Entities;
-using Domain.Repositories;
-using Domain.Shared;
-using Mapster;
-
-namespace Application.Features.Books;
+﻿namespace Application.Features.Books;
 
 public record AddBookCommand : IRequest<BookDto>
 {
-    public required string ISBN { get; init; }
+    public required string Isbn { get; init; }
     public required string Title { get; init; }
     public required string Author { get; init; }
     public required int Count { get; set; }

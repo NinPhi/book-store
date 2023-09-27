@@ -1,4 +1,4 @@
-﻿using Domain.Shared;
+﻿using Application.Shared;
 
 namespace Infrastructure.Data;
 

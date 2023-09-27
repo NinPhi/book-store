@@ -7,7 +7,7 @@ public class Book
     public long Id { get; set; }
 
     [StringLength(100)]
-    public required string ISBN { get; set; }
+    public required string Isbn { get; set; }
 
     [StringLength(400)]
     public required string Title { get; set; }

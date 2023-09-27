@@ -1,10 +1,4 @@
-﻿using Application.Contracts;
-using Application.Shared;
-using Domain.Entities;
-using Domain.Enums;
-using Domain.Repositories;
-using Domain.Shared;
-using Mapster;
+﻿using Domain.Enums;
 
 namespace Application.Features.Users;
 

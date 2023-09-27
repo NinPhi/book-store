@@ -1,7 +1,4 @@
-﻿using Domain.Repositories;
-using Domain.Shared;
-
-namespace Application.Features.Users;
+﻿namespace Application.Features.Users;
 
 public record DeleteUserCommand : IRequest
 {

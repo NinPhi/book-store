@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using System.Security.Claims;
 
 namespace WebApi.Controllers;
@@ -32,7 +31,8 @@ public class UserProfileController : ControllerBase
         return Ok(response?.Profile ?? new object());
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     [HttpPatch("{username}")]
     public async Task<IActionResult> PatchProfile(
         PatchUserProfileProps props, string username)
@@ -43,9 +43,12 @@ public class UserProfileController : ControllerBase
             Props = props,
         };
 
-        await _mediator.Send(request);
+        var result = await _mediator.Send(request);
 
-        return Ok();
+        if (result.IsSuccess)
+            return Ok();
+        
+        return BadRequest(result.Reasons);
     }
 
     [HttpPatch]

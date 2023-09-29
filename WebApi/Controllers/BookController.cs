@@ -1,4 +1,5 @@
 ﻿using Application.Features.Books;
+using Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -72,15 +73,26 @@ public class BookController : ControllerBase
     public async Task<IActionResult> Patch(
         PatchBookProps props, string isbn)
     {
-        var request = new PatchBookCommand
+        try
         {
-            Isbn = isbn,
-            Props = props,
-        };
+            var request = new PatchBookCommand
+            {
+                Isbn = isbn,
+                Props = props,
+            };
 
-        await _mediator.Send(request);
+            await _mediator.Send(request);
 
-        return Ok();
+            return Ok();
+        }
+        catch (BookNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [Authorize(Roles = "Admin")]

@@ -45,9 +45,12 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Add(
         AddUserCommand request)
     {
-        var response = await _mediator.Send(request);
+        var result = await _mediator.Send(request);
 
-        return Created("users/" + response.Username, response);
+        if (result.IsSuccess && result.Value != null)
+            return Created("api/users/" + result.Value.Username, result.Value);
+
+        return BadRequest(result.Reasons);
     }
 
     [HttpPatch("{username}/role/{role:int}")]

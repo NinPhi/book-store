@@ -1,4 +1,6 @@
-﻿namespace Application.Features.Books;
+﻿using Domain.Exceptions;
+
+namespace Application.Features.Books;
 
 public record PatchBookCommand : IRequest
 {
@@ -29,7 +31,7 @@ internal class PatchBookCommandHandler
         PatchBookCommand request, CancellationToken cancellationToken)
     {
         var book = await _bookRepository.GetByIsbnAsync(request.Isbn)
-            ?? throw new Exception("Book with the specified ISBN was not found.");
+            ?? throw new BookNotFoundException(request.Isbn);
 
         if (!string.IsNullOrWhiteSpace(request.Props.Title))
             book.Title = request.Props.Title;

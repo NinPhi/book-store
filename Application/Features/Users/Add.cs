@@ -1,8 +1,9 @@
 ﻿using Domain.Enums;
+using FluentResults;
 
 namespace Application.Features.Users;
 
-public record AddUserCommand : IRequest<UserDto>
+public record AddUserCommand : IRequest<Result<UserDto>>
 {
     public required string Username { get; init; }
     public required string Password { get; init; }
@@ -15,7 +16,7 @@ public record AddUserCommand : IRequest<UserDto>
 }
 
 internal class AddUserCommandHandler
-    : IRequestHandler<AddUserCommand, UserDto>
+    : IRequestHandler<AddUserCommand, Result<UserDto>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _uow;
@@ -28,15 +29,21 @@ internal class AddUserCommandHandler
         _passwordManager = passwordManager;
     }
 
-    public async Task<UserDto> Handle(
+    public async Task<Result<UserDto>> Handle(
         AddUserCommand request, CancellationToken cancellationToken)
     {
+        List<Error> errors = new();
+
         var userExists = await _userRepository.ExistsAsync(request.Username);
-        if (userExists) throw new Exception("User with this username already exists.");
+        if (userExists)
+            errors.Add(new($"User with username {request.Username} already exists."));
+
+        if (!Enum.IsDefined(request.Role))
+            errors.Add(new("Unknown role was specified for the user."));
+
+        if (errors.Any()) return Result.Fail(errors);
 
         var passwordHash = _passwordManager.Hash(request.Password);
-
-        if (!Enum.IsDefined(request.Role)) throw new Exception("Unknown role was specified for the user.");
 
         var user = new User
         {

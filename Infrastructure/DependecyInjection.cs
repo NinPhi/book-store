@@ -19,7 +19,7 @@ public static class DependencyInjection
             .AddAppDbContext(configuration)
             .AddTransient<IUnitOfWork, UnitOfWork>()
             .AddRepositories()
-            .AddOtherServices();
+            .AddOtherServices(configuration);
     }
 
     private static IServiceCollection AddAppDbContext(
@@ -48,7 +48,7 @@ public static class DependencyInjection
         services.AddTransient<IPasswordManager, PasswordManager>();
         services.AddHttpClient<ITodoApi, TodoApi>(client =>
         {
-            client.BaseAddress = 
+            client.BaseAddress = new Uri("");
         });
 
         return services;

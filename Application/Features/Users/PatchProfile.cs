@@ -1,13 +1,15 @@
-﻿namespace Application.Features.Users;
+﻿using FluentResults;
 
-public record PatchUserProfileCommand : IRequest
+namespace Application.Features.Users;
+
+public record PatchUserProfileCommand : IRequest<Result>
 {
     public required string Username { get; init; }
 
     public required PatchUserProfileProps Props { get; init; }
 }
 
-public record PatchUserProfileProps : IRequest
+public record PatchUserProfileProps
 {
     public string? FirstName { get; init; }
     public string? LastName { get; init; }
@@ -16,7 +18,7 @@ public record PatchUserProfileProps : IRequest
 }
 
 internal class PatchUserProfileCommandHandler
-    : IRequestHandler<PatchUserProfileCommand>
+    : IRequestHandler<PatchUserProfileCommand, Result>
 {
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _uow;
@@ -27,11 +29,13 @@ internal class PatchUserProfileCommandHandler
         _uow = uow;
     }
 
-    public async Task Handle(
+    public async Task<Result> Handle(
         PatchUserProfileCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByUsernameAsync(request.Username)
-            ?? throw new Exception("User with the specified username doesn't exist.");
+        var user = await _userRepository.GetByUsernameAsync(request.Username);
+
+        if (user == null)
+            return Result.Fail($"User with username {request.Username} was not found.");
 
         if (!string.IsNullOrWhiteSpace(request.Props.FirstName))
             user.Profile.FirstName = request.Props.FirstName!;
@@ -47,5 +51,7 @@ internal class PatchUserProfileCommandHandler
 
         _userRepository.Update(user);
         await _uow.CommitAsync();
+
+        return Result.Ok();
     }
 }
